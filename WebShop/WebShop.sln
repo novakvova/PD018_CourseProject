@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShopAPI", "WebShopAPI\WebShopAPI.csproj", "{7E1228E3-69E8-4BA1-8671-32771CD3533A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebShopAPI", "WebShopAPI\WebShopAPI.csproj", "{7E1228E3-69E8-4BA1-8671-32771CD3533A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.Domain", "WebShop.Domain\WebShop.Domain.csproj", "{5B5602FD-9EAE-47BC-B491-BED263A99262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebShop.EFData", "WebShop.EFData\WebShop.EFData.csproj", "{4DAC426F-88A2-4FF1-902D-9239A11540D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7E1228E3-69E8-4BA1-8671-32771CD3533A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E1228E3-69E8-4BA1-8671-32771CD3533A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E1228E3-69E8-4BA1-8671-32771CD3533A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B5602FD-9EAE-47BC-B491-BED263A99262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B5602FD-9EAE-47BC-B491-BED263A99262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B5602FD-9EAE-47BC-B491-BED263A99262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B5602FD-9EAE-47BC-B491-BED263A99262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DAC426F-88A2-4FF1-902D-9239A11540D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DAC426F-88A2-4FF1-902D-9239A11540D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DAC426F-88A2-4FF1-902D-9239A11540D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DAC426F-88A2-4FF1-902D-9239A11540D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
