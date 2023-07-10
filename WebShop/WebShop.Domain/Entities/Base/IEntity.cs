@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WebShop.Domain.Entities.Base {
-    public interface IEntity<TId> {
-        public TId Id { get; set; }
+    public interface IEntity {
+        public Guid Id { get; set; }
         public bool Deleted { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
+        public DateTime? DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
     }
 }
