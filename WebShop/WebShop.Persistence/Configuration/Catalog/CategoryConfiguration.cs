@@ -13,15 +13,11 @@ namespace WebShop.Domain.Configuration.Catalog {
         public override void Configure(EntityTypeBuilder<CategoryEntity> builder) {
             #region Properties
 
-            builder.ToTable("tbl_categories");
-
-            builder.Property(x => x.Name)
-                .HasMaxLength(512)
-                .IsRequired(true);
-
-            builder.Property(x => x.Image)
-                .HasMaxLength(512)
-                .IsRequired(false);
+            builder.HasKey(c => c.Id);
+            builder.HasIndex(c => c.Id).IsUnique();
+            builder.Property(c => c.Title).HasMaxLength(250).IsRequired();
+            builder.Property(c => c.Details).HasMaxLength(5000).IsRequired();
+            builder.Property(c => c.Image).HasMaxLength(500);
 
             #endregion
 
