@@ -17,11 +17,14 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 
+// Add Clean-Architecture layers
+builder.Services.AddApplication();
+builder.Services.AddPersistence(configuration);
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CategoriesDbContext>();
 
 // Add automapper
 builder.Services.AddAutoMapper(config => {
@@ -29,9 +32,7 @@ builder.Services.AddAutoMapper(config => {
     config.AddProfile(new AssemblyMappingProfile(typeof(ICategoriesDbContext).Assembly));
 });
 
-// Add Clean-Architecture layers
-builder.Services.AddApplication();
-builder.Services.AddPersistence(configuration);
+
 
 // enable CORS to all sources
 builder.Services.AddCors(options => {

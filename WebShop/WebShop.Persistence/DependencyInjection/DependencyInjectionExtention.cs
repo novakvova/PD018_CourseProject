@@ -13,7 +13,7 @@ using WebShop.Application.Interfaces;
 namespace WebShop.Persistence.DependencyInjection {
     public static class DependencyInjectionExtention {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) {
-            var connectionString = configuration["DefaultConnection"];
+            var connectionString = configuration["ConnectionStrings:DefaultConnection"];
 
             // add all DbContextes
             services.AddDbContext<CategoriesDbContext>(options => options.UseNpgsql(connectionString));
