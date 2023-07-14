@@ -1,7 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using MyShop.Persistence.DbContexts;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using WebShop.Application.Common.Mappings;
+using WebShop.Application.Interfaces;
+using WebShop.Application.DependencyInjection;
+using WebShop.Persistence.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// get configuration
+
+var configuration = builder.Configuration;
+
 
 // Add services to the container.
 
@@ -9,7 +21,26 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CategoriesDbContext>(options => options.UseNpgsql("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddDbContext<CategoriesDbContext>();
+
+// Add automapper
+builder.Services.AddAutoMapper(config => {
+    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(ICategoriesDbContext).Assembly));
+});
+
+// Add Clean-Architecture layers
+builder.Services.AddApplication();
+builder.Services.AddPersistence(configuration);
+
+// enable CORS to all sources
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", policy => {
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.AllowAnyOrigin();
+    });
+});
 
 var app = builder.Build();
 
@@ -21,8 +52,8 @@ if ( app.Environment.IsDevelopment() ) {
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.MapControllers();
+
+app.UseCors("AllowAll");
 
 app.Run();
