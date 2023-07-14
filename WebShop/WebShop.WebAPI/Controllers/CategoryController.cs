@@ -5,7 +5,7 @@ using WebShop.Application.MediatR.Catalog.Categories.Commands.CreateCategory;
 using WebShop.Application.MediatR.Catalog.Categories.Commands.DeleteCategory;
 using WebShop.Application.MediatR.Catalog.Categories.Commands.UpdateCategory;
 using WebShop.Application.MediatR.Catalog.Categories.Queries.GetCategoryDetails;
-using WebShop.WebAPI.Models;
+using WebShop.Dto.Catalog.Category;
 
 namespace WebShop.WebAPI.Controllers {
     public class CategoryController : BaseController {
