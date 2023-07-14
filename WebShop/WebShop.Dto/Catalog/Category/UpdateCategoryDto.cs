@@ -2,7 +2,7 @@
 using WebShop.Application.Common.Mappings;
 using WebShop.Application.MediatR.Catalog.Categories.Commands.UpdateCategory;
 
-namespace WebShop.WebAPI.Models {
+namespace WebShop.Dto.Catalog.Category {
     public class UpdateCategoryDto : IMapWith<UpdateCategoryCommand> {
         public Guid? CategoryId { get; set; } = null!;
         public string? Title { get; set; }

@@ -28,7 +28,10 @@ builder.Services.AddSwaggerGen();
 
 // Add automapper
 builder.Services.AddAutoMapper(config => {
-    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    // load assembly with DTO`s for mapping
+    var assemblyDto = AppDomain.CurrentDomain.GetAssemblies().Where(a => ( a.GetName().Name ?? "" ).StartsWith("WebShop.Dto")).Single();
+
+    config.AddProfile(new AssemblyMappingProfile(assemblyDto));
     config.AddProfile(new AssemblyMappingProfile(typeof(ICategoriesDbContext).Assembly));
 });
 
