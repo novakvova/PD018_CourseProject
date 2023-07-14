@@ -26,12 +26,27 @@ namespace WebShop.Application.MediatR.Catalog.Categories.Commands.UpdateCategory
             if ( entity is null /*|| entity.CreatorID != request.CreatorId*/ )
                 throw new NotFoundException(nameof(CategoryEntity), request.CategoryId);
 
-            entity.Details = request.Details;
-            entity.Title = request.Title;
-            entity.Image = request.Image;
-            entity.DateUpdated = DateTime.Now;
+            int countUpdated = 0;
 
-            await _categoriesDbContext.SaveChangesAsync(cancellationToken);
+            if ( request.Details is not null ) {
+                countUpdated++;
+                entity.Details = request.Details;
+            }
+
+            if ( request.Title is not null ) {
+                countUpdated++;
+                entity.Title = request.Title;
+            }
+
+            if ( request.Image is not null ) {
+                countUpdated++;
+                entity.Image = request.Image;
+            }
+
+            if ( countUpdated > 0 ) {
+                entity.DateUpdated = DateTime.UtcNow;
+                await _categoriesDbContext.SaveChangesAsync(cancellationToken);
+            }
 
             return Unit.Value;
         }
