@@ -15,7 +15,7 @@ namespace WebShop.Domain.Entities.Base {
         public BaseEntity() {
             Id = Guid.NewGuid();
             Deleted = false;
-            DateCreated = DateTime.Now;
+            DateCreated = DateTime.UtcNow;
             DateUpdated = null;
         }
     }
