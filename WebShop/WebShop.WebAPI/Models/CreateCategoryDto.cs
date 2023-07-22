@@ -2,7 +2,7 @@
 using WebShop.Application.Common.Mappings;
 using WebShop.Application.MediatR.Catalog.Categories.Commands.CreateCategory;
 
-namespace WebShop.Dto.Catalog.Category {
+namespace WebShop.WebAPI.Models {
     public class CreateCategoryDto : IMapWith<CreateCategoryCommand> {
         public string Title { get; set; } = null!;
         public string Image { get; set; } = null!;
