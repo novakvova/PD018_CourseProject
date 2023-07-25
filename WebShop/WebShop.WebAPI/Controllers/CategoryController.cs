@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.CreateCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.DeleteCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.UpdateCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Queries.GetCategoryDetails;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
 using WebShop.Dto.Catalog.Category;
 
 namespace WebShop.WebAPI.Controllers {
@@ -29,7 +30,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryListVm>> Get(Guid id) {
+        public async Task<ActionResult<CategoryListVm>> Get(int id) {
             // forming query from http request
             var query = new GetCategoryDetailsQuery {
                 CategoryId = id
@@ -42,10 +43,9 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateCategoryDto dto) {
+        public async Task<ActionResult<int>> Create([FromBody] CreateCategoryDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateCategoryCommand>(dto);
-            command.CreatorID = UserId;
             var categoryId = await Mediator.Send(command);
 
             return Ok(categoryId);
