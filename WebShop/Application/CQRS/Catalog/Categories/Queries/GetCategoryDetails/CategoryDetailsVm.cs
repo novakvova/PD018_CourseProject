@@ -3,7 +3,7 @@ using WebShop.Domain.Entities;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails {
     public class CategoryDetailsVm : IMapWith<CategoryEntity> {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? Title { get; set; }
         public string? Image { get; set; }
         public string? Details { get; set; }

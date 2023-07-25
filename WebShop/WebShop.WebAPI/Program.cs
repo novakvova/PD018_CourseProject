@@ -15,6 +15,12 @@ var configuration = builder.Configuration;
 
 // Add Clean-Architecture layers
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(configuration);
+
+builder.Services.AddAutoMapper(config => {
+    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(ICatalogDbContext).Assembly));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -3,7 +3,7 @@ using WebShop.Domain.Entities;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList {
     public class CategoryLookupDto : IMapWith<CategoryEntity> {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; } = null!;
 
         public void Mapping(Profile profile) {

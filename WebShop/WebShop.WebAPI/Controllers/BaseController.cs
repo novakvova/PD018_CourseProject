@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebShop.Application.Common.Exceptions;
+using WebShop.WebAPI.Common.Exceptions;
 
 namespace WebShop.WebAPI.Controllers {
     [Route("api/[controller]/[action]")]
@@ -15,11 +16,11 @@ namespace WebShop.WebAPI.Controllers {
             HttpContext.RequestServices.GetService<IMediator>() ??
                 throw new ServiceNotRegisteredException(nameof(IMediator));
 
-        // get user id from claims (token).
-        // if User or Identity is null - set UserId to empty
-        internal Guid UserId =>
-            !User?.Identity?.IsAuthenticated ?? false
-            ? Guid.Empty
-            : Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
+        //// get user id from claims (token).
+        //// if User or Identity is null - set UserId to empty
+        //internal Guid UserId =>
+        //    !User?.Identity?.IsAuthenticated ?? false
+        //    ? Guid.Empty
+        //    : Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
     }
 }
