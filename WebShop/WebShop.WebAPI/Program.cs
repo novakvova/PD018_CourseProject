@@ -3,10 +3,9 @@ using MyShop.Persistence.DbContexts;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebShop.Application.Common.Mappings;
-using WebShop.Application.Interfaces;
 using WebShop.Application.DependencyInjection;
 using WebShop.Persistence.DependencyInjection;
-
+using WebShop.Application.Common.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +28,7 @@ builder.Services.AddSwaggerGen();
 // Add automapper
 builder.Services.AddAutoMapper(config => {
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
-    config.AddProfile(new AssemblyMappingProfile(typeof(ICategoriesDbContext).Assembly));
+    config.AddProfile(new AssemblyMappingProfile(typeof(IApplicationDbContext).Assembly));
 });
 
 
