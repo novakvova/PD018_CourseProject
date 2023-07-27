@@ -35,10 +35,8 @@ public class FileService : IFileService {
         return File.Exists(path);
     }
     private string GetFullPath(string context, string filename) {
-        return Path.Combine(
-            _filesStorage,
-            context,
-            filename);
+        var res = $"{_filesStorage}{context}/{filename}";
+        return res;
     }
 
     private string GetNewFilePath(string context, Stream fileContent) {
@@ -60,7 +58,7 @@ public class FileService : IFileService {
             await fileContent.CopyToAsync(fs);
         }
 
-        return path;
+        return path.Replace(_filesStorage, "");
     }
 
     public Task<string> UploadImageAsync(string context, Stream fileContent) {
