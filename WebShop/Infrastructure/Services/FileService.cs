@@ -2,6 +2,8 @@
 using System.IO;
 using WebShop.Application.Common.Helpers;
 using WebShop.Application.Common.Interfaces;
+using WebShop.Application.CQRS.Files.Images.Queries.GetImage;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebShop.Infrastructure.Services;
 
@@ -17,12 +19,26 @@ public class FileService : IFileService {
         throw new NotImplementedException();
     }
 
-    public Task<Stream> GetFileAsync(string context, string filename) {
-        throw new NotImplementedException();
+    public async Task<GetImageQueryResult> GetFileAsync(string context, string filename) {
+        var path = GetFullPath(context, filename);
+
+        var res = new GetImageQueryResult() {
+            Extention = Path.GetExtension(path),
+            Stream = File.OpenRead(path)
+        };
+
+        return res;
     }
 
-    public Task<bool> IsFileExistAsync(string context, string filename) {
-        throw new NotImplementedException();
+    public async Task<bool> IsFileExistAsync(string context, string filename) {
+        var path = GetFullPath(context, filename);
+        return File.Exists(path);
+    }
+    private string GetFullPath(string context, string filename) {
+        return Path.Combine(
+            _filesStorage,
+            context,
+            filename);
     }
 
     private string GetNewFilePath(string context, Stream fileContent) {
@@ -31,10 +47,7 @@ public class FileService : IFileService {
         // bring stream pointer back
         fileContent.Position -= ext.Length;
 
-        return Path.Combine(
-            _filesStorage,
-            context,
-            Path.ChangeExtension(
+        return GetFullPath(context, Path.ChangeExtension(
                 Guid.NewGuid().ToString(),
                 ImageHelper.GetImageFormat(ext).ToString()));
     }

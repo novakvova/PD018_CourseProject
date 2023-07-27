@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Domain\WebShop.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CQRS\Files\Images\Commands\" />
+  </ItemGroup>
+
 </Project>
