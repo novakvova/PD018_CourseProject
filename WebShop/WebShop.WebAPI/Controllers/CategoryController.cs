@@ -43,7 +43,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] CreateCategoryDto dto) {
+        public async Task<ActionResult<int>> Create([FromForm] CreateCategoryDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateCategoryCommand>(dto);
             var categoryId = await Mediator.Send(command);

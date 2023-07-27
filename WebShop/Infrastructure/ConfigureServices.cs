@@ -29,6 +29,7 @@ public static class ConfigureServices {
         services.AddScoped<CatalogDbContextInitialiser>();
 
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IFileService, FileService>();
 
         return services;
     }
