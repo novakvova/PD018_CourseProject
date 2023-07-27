@@ -52,7 +52,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPatch]
-        public async Task<ActionResult> Update([FromBody] UpdateCategoryDto dto) {
+        public async Task<ActionResult> Update([FromForm] UpdateCategoryDto dto) {
             var command = mapper.Map<UpdateCategoryCommand>(dto);
             await Mediator.Send(command);
             return Ok();
