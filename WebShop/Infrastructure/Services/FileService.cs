@@ -32,10 +32,18 @@ public class FileService : IFileService {
 
     public async Task<bool> IsFileExistAsync(string context, string filename) {
         var path = GetFullPath(context, filename);
+        return await IsFileExistAsync(path);
+    }
+    private async Task<bool> IsFileExistAsync(string path) {
         return File.Exists(path);
     }
+
     private string GetFullPath(string context, string filename) {
         var res = $"{_filesStorage}{context}/{filename}";
+        return res;
+    }
+    private string GetFullPath(string fullpath) {
+        var res = $"{_filesStorage}{fullpath}";
         return res;
     }
 
@@ -63,5 +71,14 @@ public class FileService : IFileService {
 
     public Task<string> UploadImageAsync(string context, Stream fileContent) {
         throw new NotImplementedException();
+    }
+
+    public async Task DeleteFileAsync(string fullPath) {
+        fullPath = GetFullPath(fullPath);
+
+        if ( await IsFileExistAsync(fullPath) == false )
+            throw new NotFoundException(fullPath, "");
+
+        File.Delete(fullPath);
     }
 }

@@ -8,4 +8,5 @@ public interface IFileService {
     Task<string> UploadFileAsync(string context, Stream fileContent);
     Task<string> UploadImageAsync(string context, Stream fileContent);
     Task DeleteFileAsync(string context, string fileName);
+    Task DeleteFileAsync(string fullPath);
 }
