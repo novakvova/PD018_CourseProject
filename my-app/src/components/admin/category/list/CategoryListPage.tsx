@@ -31,7 +31,7 @@ const CategoryListPage = () => {
     setIsLoading(true);
     http_common
       .get<ICategoryGetResult>(
-        `${APP_ENV.BASE_URL}api/category?page=${localpage}`
+        `${APP_ENV.BASE_URL}api/category/GetA2ll?page=${localpage}`
       )
       .then((resp) => {
         setIsLoading(false);
