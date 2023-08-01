@@ -6,6 +6,7 @@ using WebShop.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -29,7 +30,13 @@ public static class ConfigureServices {
         services.AddScoped<CatalogDbContextInitialiser>();
 
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IFileService, FileService>();
 
         return services;
+    }
+    public static ILoggingBuilder AddLogging(this ILoggingBuilder logging, IConfiguration configuration) {
+        logging.ClearProviders();
+        logging.AddConsole();
+        return logging;
     }
 }

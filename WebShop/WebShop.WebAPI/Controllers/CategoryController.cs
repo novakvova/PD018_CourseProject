@@ -43,7 +43,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] CreateCategoryDto dto) {
+        public async Task<ActionResult<int>> Create([FromForm] CreateCategoryDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateCategoryCommand>(dto);
             var categoryId = await Mediator.Send(command);
@@ -52,7 +52,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPatch]
-        public async Task<ActionResult> Update([FromBody] UpdateCategoryDto dto) {
+        public async Task<ActionResult> Update([FromForm] UpdateCategoryDto dto) {
             var command = mapper.Map<UpdateCategoryCommand>(dto);
             await Mediator.Send(command);
             return Ok();
