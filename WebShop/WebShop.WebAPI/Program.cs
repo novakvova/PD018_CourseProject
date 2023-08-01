@@ -16,6 +16,7 @@ var configuration = builder.Configuration;
 // Add Clean-Architecture layers
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(configuration);
+builder.Logging.AddLogging(configuration);
 
 builder.Services.AddAutoMapper(config => {
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
