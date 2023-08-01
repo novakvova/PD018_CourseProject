@@ -13,7 +13,7 @@ export interface ILinkUrl {
 
 export interface ICategoryGetResult {
   current_page: number;
-  data: ICategoryItem[];
+  categories: ICategoryItem[];
   first_page_url: string;
   from: number;
   last_page: number;
