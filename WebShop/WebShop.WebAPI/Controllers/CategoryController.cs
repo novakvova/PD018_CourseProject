@@ -6,7 +6,9 @@ using WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
 using WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategorySearch;
 using WebShop.Dto.Catalog.Category;
+using WebShop.WebAPI.DTO.Catalog.Category;
 
 namespace WebShop.WebAPI.Controllers {
     public class CategoryController : BaseController {
@@ -14,6 +16,16 @@ namespace WebShop.WebAPI.Controllers {
 
         public CategoryController(IMapper mapper) {
             this.mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<CategorySearchVm>> Search([FromQuery] GetCategorySearchDto search) {
+            var query = mapper.Map<GetCategorySearchQuery>(search);
+
+            // get result from Mediator request handler
+            var result = await Mediator.Send(query);
+
+            return Ok(result);
         }
 
         [HttpGet]
