@@ -6,6 +6,11 @@ using WebShop.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using WebShop.Persistance.Identity;
+using Microsoft.AspNetCore.Identity;
+using WebShop.Persistance.Common.Extensions;
+using WebShop.Persistance.Data;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -24,11 +29,27 @@ public static class ConfigureServices {
             options.UseNpgsql(connectionString);
         });
 
+        services.AddDbContext<UserDbContext>((sp, options) => {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
+            options.UseNpgsql(connectionString);
+        });
+
         services.AddScoped<ICatalogDbContext>(provider => provider.GetRequiredService<CatalogDbContext>());
 
         services.AddScoped<CatalogDbContextInitialiser>();
 
+        services.AddIdentityExtensions().AddEntityFrameworkStores<UserDbContext>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+            options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+        });
+
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IIdentityService, IdentityService>();
 
         return services;
     }

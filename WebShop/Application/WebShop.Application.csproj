@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Domain\WebShop.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CQRS\Identity\Users\Queries\" />
+  </ItemGroup>
+
 </Project>
