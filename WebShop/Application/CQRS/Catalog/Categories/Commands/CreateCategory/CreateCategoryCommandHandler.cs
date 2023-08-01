@@ -5,15 +5,21 @@ using WebShop.Domain.Events;
 namespace WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int> {
         private readonly ICatalogDbContext dbContext;
+        private readonly IFileService fileService;
 
-        public CreateCategoryCommandHandler(ICatalogDbContext db) {
+        public CreateCategoryCommandHandler(ICatalogDbContext db, IFileService fileService) {
             dbContext = db;
+            this.fileService = fileService;
         }
 
         public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken) {
+            var image = await fileService.UploadFileAsync(
+                nameof(CategoryEntity),
+                request.ImageContent);
+
             var category = new CategoryEntity {
                 Title = request.Title,
-                Image = request.Image,
+                Image = image,
                 Details = request.Details,
             };
 

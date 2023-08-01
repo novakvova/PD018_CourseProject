@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebShop.Application.Common.Exceptions;
 using WebShop.WebAPI.Common.Exceptions;
+using WebShop.WebAPI.Filters;
 
 namespace WebShop.WebAPI.Controllers {
     [Route("api/[controller]/[action]")]
+    [ApiExceptionFilter]
     [ApiController]
     public abstract class BaseController : ControllerBase {
         private IMediator mediator = null!;
