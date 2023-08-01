@@ -15,13 +15,13 @@ const AdminLayout = () => {
   const location = useLocation();
   const currentRoute = location.pathname;
 
-  useEffect(() => {
-    console.log("DefaultLayout useEffect");
-    console.log("current route:", currentRoute);
-    if (isAuth == false) {
-      navigator(`/auth/login?forwardTo=${currentRoute}`);
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("DefaultLayout useEffect");
+  //   console.log("current route:", currentRoute);
+  //   if (isAuth == false) {
+  //     navigator(`/auth/login?forwardTo=${currentRoute}`);
+  //   }
+  // }, []);
 
   return (
     <>

@@ -15,20 +15,20 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-if (localStorage.token) {
-  const user = jwtDecode(localStorage.token) as IUser;
-  http_common.defaults.headers[
-    "Authorization"
-  ] = `Bearer ${localStorage.token}`;
+// if (localStorage.token) {
+//   const user = jwtDecode(localStorage.token) as IUser;
+//   http_common.defaults.headers[
+//     "Authorization"
+//   ] = `Bearer ${localStorage.token}`;
 
-  store.dispatch({
-    type: AuthUserActionType.LOGIN_USER,
-    payload: {
-      email: user.email,
-      name: user.name,
-    },
-  });
-}
+//   store.dispatch({
+//     type: AuthUserActionType.LOGIN_USER,
+//     payload: {
+//       email: user.email,
+//       name: user.name,
+//     },
+//   });
+// }
 root.render(
   <Provider store={store}>
     <BrowserRouter>
