@@ -1,6 +1,4 @@
-﻿using ValidationException = WebShop.Application.Common.Exceptions.ValidationException;
-
-namespace WebShop.Application.Common.Behaviours;
+﻿namespace WebShop.Application.Common.Behaviours;
 
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
      where TRequest : notnull {

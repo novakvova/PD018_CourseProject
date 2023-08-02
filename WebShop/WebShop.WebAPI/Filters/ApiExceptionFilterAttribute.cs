@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Ardalis.GuardClauses;
+using FluentValidation;
 
 namespace WebShop.WebAPI.Filters;
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute {
@@ -41,7 +42,11 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute {
     private void HandleValidationException(ExceptionContext context) {
         var exception = (ValidationException)context.Exception;
 
-        var details = new ValidationProblemDetails(exception.Errors) {
+        var details = new ValidationProblemDetails(
+            exception.Errors
+            .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
+            .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray())) {
+
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
         };
 
