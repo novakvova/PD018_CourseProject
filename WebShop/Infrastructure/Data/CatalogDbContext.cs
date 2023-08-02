@@ -15,6 +15,7 @@ public class CatalogDbContext : DbContext, ICatalogDbContext {
     protected override void OnModelCreating(ModelBuilder builder) {
         builder.ApplyConfiguration(new CategoryConfiguration());
         builder.ApplyConfiguration(new ProductConfiguration());
+        builder.ApplyConfiguration(new ProductImagesConfiguration());
         base.OnModelCreating(builder);
     }
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken) {

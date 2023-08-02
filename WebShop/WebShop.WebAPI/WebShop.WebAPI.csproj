@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Infrastructure\WebShop.Persistance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="public\uploads\ProductEntity\" />
+  </ItemGroup>
+
 </Project>

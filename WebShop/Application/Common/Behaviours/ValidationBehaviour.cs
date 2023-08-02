@@ -3,19 +3,15 @@
 namespace WebShop.Application.Common.Behaviours;
 
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-     where TRequest : notnull
-{
+     where TRequest : notnull {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
-    {
+    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) {
         _validators = validators;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-    {
-        if (_validators.Any())
-        {
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken) {
+        if ( _validators.Any() ) {
             var context = new ValidationContext<TRequest>(request);
 
             var validationResults = await Task.WhenAll(
@@ -27,7 +23,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
                 .SelectMany(r => r.Errors)
                 .ToList();
 
-            if (failures.Any())
+            if ( failures.Any() )
                 throw new ValidationException(failures);
         }
         return await next();
