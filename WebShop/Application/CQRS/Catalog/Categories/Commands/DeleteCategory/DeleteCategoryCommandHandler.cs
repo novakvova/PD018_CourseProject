@@ -2,6 +2,7 @@
 using WebShop.Application.Common.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Domain.Events;
+using WebShop.Domain.Events.Category;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory {
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Unit> {

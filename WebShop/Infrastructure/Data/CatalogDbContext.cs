@@ -10,9 +10,11 @@ public class CatalogDbContext : DbContext, ICatalogDbContext {
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options) { }
 
     public DbSet<CategoryEntity> Categories { get; set; }
+    public DbSet<ProductEntity> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder) {
         builder.ApplyConfiguration(new CategoryConfiguration());
+        builder.ApplyConfiguration(new ProductConfiguration());
         base.OnModelCreating(builder);
     }
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken) {

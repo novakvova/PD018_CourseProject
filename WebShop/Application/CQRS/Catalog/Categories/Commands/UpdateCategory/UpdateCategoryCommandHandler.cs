@@ -11,6 +11,7 @@ using WebShop.Domain.Events;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory {
     using global::WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
+    using global::WebShop.Domain.Events.Category;
     using Microsoft.Extensions.Logging;
 
     namespace WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory {
