@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
-using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
 using WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct;
 using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductDetails;
+using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductSearch;
 using WebShop.Dto.Catalog.Product;
+using WebShop.WebAPI.DTO.Catalog.Product;
 
 namespace WebShop.WebAPI.Controllers {
     public class ProductController : BaseController {
@@ -12,6 +12,16 @@ namespace WebShop.WebAPI.Controllers {
 
         public ProductController(IMapper mapper) {
             this.mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ProductSearchVm>> Search([FromQuery] GetProductSearchDto search) {
+            var query = mapper.Map<GetProductSearchQuery>(search);
+
+            // get result from Mediator request handler
+            var result = await Mediator.Send(query);
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
