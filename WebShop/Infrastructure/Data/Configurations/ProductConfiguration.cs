@@ -13,6 +13,15 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity> {
         builder.Property(c => c.Title).HasMaxLength(250).IsRequired();
         builder.Property(c => c.Details).HasMaxLength(5000).IsRequired();
 
+        // setup cascade delete of product images in db
+        builder.HasMany(p => p.Images)
+            .WithOne(i => i.Product)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(p => p.Category)
+            .WithMany()
+            .OnDelete(DeleteBehavior.SetNull);
+
         #endregion
     }
 }
