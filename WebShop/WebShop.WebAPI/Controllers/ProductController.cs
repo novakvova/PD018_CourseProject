@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
 using WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct;
+using WebShop.Application.CQRS.Catalog.Products.Commands.DeleteProduct;
 using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductDetails;
 using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductSearch;
+using WebShop.Dto.Catalog.Category;
 using WebShop.Dto.Catalog.Product;
 using WebShop.WebAPI.DTO.Catalog.Product;
 
@@ -44,6 +47,13 @@ namespace WebShop.WebAPI.Controllers {
             var id = await Mediator.Send(command);
 
             return Ok(id);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete([FromBody] DeleteProductDto dto) {
+            var command = mapper.Map<DeleteProductCommand>(dto);
+            await Mediator.Send(command);
+            return Ok();
         }
     }
 }
