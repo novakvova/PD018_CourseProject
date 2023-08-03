@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper.Configuration.Conventions;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,12 @@ namespace WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct {
                 .MustAsync(async (c, token) =>
                     ( await db.Categories.FindAsync(c) ) != null)
                 .WithMessage(p => $"Category {p.CategoryId} does not exist");
+
+            RuleForEach(p => p.Images)
+                .NotEmpty()
+                .Must(BeImage)
+                .WithMessage("File is not image.");
+
         }
 
         private bool BeValidUrl(string? url) {
