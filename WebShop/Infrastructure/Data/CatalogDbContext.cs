@@ -3,6 +3,7 @@ using WebShop.Application.Common.Interfaces;
 using WebShop.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using WebShop.Infrastructure.Data.Configurations;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace WebShop.Infrastructure.Data;
 
@@ -20,5 +21,8 @@ public class CatalogDbContext : DbContext, ICatalogDbContext {
     }
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken) {
         return await base.SaveChangesAsync(cancellationToken);
+    }
+    public new EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class {
+        return base.Entry(entity);
     }
 }

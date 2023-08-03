@@ -13,6 +13,13 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         try {
             return await next();
         }
+        catch ( NotFoundException vex ) {
+            var requestName = typeof(TRequest).Name;
+
+            _logger.LogWarning(vex, "WebShop Request: Entity not found {Name} {@Request}", requestName, request);
+
+            throw;
+        }
         catch ( ValidationException vex ) {
             var requestName = typeof(TRequest).Name;
 

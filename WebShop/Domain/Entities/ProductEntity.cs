@@ -5,5 +5,5 @@ public class ProductEntity : BaseAuditableEntity {
     public string? Details { get; set; }
     public float? Price { get; set; }
     public CategoryEntity? Category { get; set; }
-    public virtual ICollection<ProductImageEntity>? Images { get; set; }
+    public virtual ICollection<ProductImageEntity> Images { get; set; } = null!;
 }
