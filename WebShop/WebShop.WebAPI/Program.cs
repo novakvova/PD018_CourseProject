@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebShop.Application.Common.Mappings;
 using WebShop.Application.Common.Interfaces;
+using WebShop.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,10 @@ builder.Services.AddCors(options => {
 });
 
 var app = builder.Build();
+
+// ensure upload folders exists
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(CategoryEntity)}");
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(ProductEntity)}");
 
 // Configure the HTTP request pipeline.
 if ( app.Environment.IsDevelopment() ) {
