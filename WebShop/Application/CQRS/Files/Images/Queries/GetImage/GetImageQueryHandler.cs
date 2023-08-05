@@ -11,10 +11,10 @@ namespace WebShop.Application.CQRS.Files.Images.Queries.GetImage {
 
         public async Task<GetImageQueryResult> Handle(GetImageQuery request, CancellationToken cancellationToken) {
             // get file
-            if ( !await fileService.IsFileExistAsync(request.Context, request.FileName) )
+            if ( !await fileService.IsImageExistAsync(request.Context, request.FileName, request.Size) )
                 throw new NotFoundException(request.FileName, request.Context);
 
-            return await fileService.GetFileAsync(request.Context, request.FileName);
+            return await fileService.GetImageAsync(request.Context, request.FileName, request.Size);
         }
     }
 }

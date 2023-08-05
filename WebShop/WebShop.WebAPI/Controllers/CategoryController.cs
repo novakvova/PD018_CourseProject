@@ -29,6 +29,7 @@ namespace WebShop.WebAPI.Controllers {
             return Ok(result);
         }
 
+        [Obsolete]
         [HttpGet]
         public async Task<ActionResult<CategoryListVm>> GetAll() {
             // forming query from http request

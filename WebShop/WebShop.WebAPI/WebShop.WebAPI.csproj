@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="public\uploads\ProductEntity\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="public\uploads\CategoryEntity\" />
   </ItemGroup>
 

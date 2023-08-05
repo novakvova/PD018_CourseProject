@@ -2,6 +2,7 @@
 using WebShop.Application.Common.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Domain.Events;
+using WebShop.Domain.Events.Category;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory {
     public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Unit> {
@@ -29,7 +30,7 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory {
             await dbContext.SaveChangesAsync(cancellationToken);
 
             try {
-                await fileService.DeleteFileAsync(category.Image);
+                await fileService.DeleteImagesAsync(category.Image);
             }
             catch ( NotFoundException e ) {
                 logger.LogWarning($"{nameof(CategoryEntity)} with key {category.Id} was deleted, but image {category.Image} not found");
