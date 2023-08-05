@@ -5,6 +5,7 @@ using WebShop.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using WebShop.Persistance.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -84,9 +85,15 @@ public static class ConfigureServices {
         
 
         services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IFileService, FileService>();
         services.AddTransient<IIdentityService, IdentityService>();
         services.AddTransient<IJwtService, JwtService>();
 
         return services;
+    }
+    public static ILoggingBuilder AddLogging(this ILoggingBuilder logging, IConfiguration configuration) {
+        logging.ClearProviders();
+        logging.AddConsole();
+        return logging;
     }
 }

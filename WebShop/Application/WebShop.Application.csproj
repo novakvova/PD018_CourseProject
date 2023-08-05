@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CQRS\Files\Images\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="CQRS\Identity\Users\Queries\" />
   </ItemGroup>
 
