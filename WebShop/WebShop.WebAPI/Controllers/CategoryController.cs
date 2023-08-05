@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory;
@@ -6,6 +7,7 @@ using WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
 using WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
+using WebShop.Domain.Constants;
 using WebShop.Dto.Catalog.Category;
 
 namespace WebShop.WebAPI.Controllers {

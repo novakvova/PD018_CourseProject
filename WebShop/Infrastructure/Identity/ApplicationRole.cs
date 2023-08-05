@@ -9,5 +9,6 @@ namespace WebShop.Persistance.Identity
 {
     public class ApplicationRole : IdentityRole<int>
     {
+
     }
 }

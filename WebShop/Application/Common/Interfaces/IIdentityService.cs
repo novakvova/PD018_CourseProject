@@ -15,11 +15,16 @@ namespace WebShop.Application.Common.Interfaces
 
         Task<bool> AuthorizeAsync(int userId, string policyName);
 
+        Task<(Result Result, string Token, string FirstName)> SignInAsync(string email, string password);
+
         Task<(Result Result, int UserId)> CreateUserAsync(
             string password, string email, string firstName, string lastName);
 
         Task<Result> DeleteUserAsync(int userId);
 
-        Task<Result> GetAllUsers();
+        Task<Result> CreateRoleAsync(string roleName);
+
+        Task<Result> AddToRoleAsync(int userId, string roleName);
+
     }
 }

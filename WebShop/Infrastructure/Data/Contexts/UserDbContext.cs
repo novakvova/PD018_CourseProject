@@ -11,7 +11,7 @@ using WebShop.Infrastructure.Data.Configurations;
 using WebShop.Persistance.Data.Configurations;
 using WebShop.Persistance.Identity;
 
-namespace WebShop.Persistance.Data
+namespace WebShop.Persistance.Data.Contexts
 {
     public class UserDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
@@ -19,6 +19,7 @@ namespace WebShop.Persistance.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.ApplyConfiguration(new ApplicationRoleConfiguration());
             base.OnModelCreating(builder);
         }
     }
