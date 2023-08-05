@@ -24,11 +24,8 @@ namespace WebShop.Application.CQRS.Catalog.Products.Commands.DeleteProduct {
             if ( entity is null )
                 throw new NotFoundException(request.ProductId.ToString(), nameof(ProductEntity));
 
-            dbContext.Products.Remove(entity);
-
-            entity.AddDomainEvent(new ProductDeletedEvent(entity));
-
-            await dbContext.SaveChangesAsync(cancellationToken);
+            // load pictures uri from second table
+            await dbContext.Entry(entity).Collection(nameof(entity.Images)).LoadAsync();
 
             if ( entity.Images is not null ) {
                 foreach ( var image in entity.Images ) {
@@ -36,13 +33,20 @@ namespace WebShop.Application.CQRS.Catalog.Products.Commands.DeleteProduct {
                         continue;
 
                     try {
-                        await fileService.DeleteFileAsync(image.Uri);
+                        await fileService.DeleteImagesAsync(image.Uri);
                     }
                     catch ( NotFoundException e ) {
                         logger.LogWarning($"{nameof(ProductEntity)} with key {entity.Id} was deleted, but image {image} not found");
                     }
                 }
             }
+
+            dbContext.Products.Remove(entity);
+
+            entity.AddDomainEvent(new ProductDeletedEvent(entity));
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
 
             return Unit.Value;
         }

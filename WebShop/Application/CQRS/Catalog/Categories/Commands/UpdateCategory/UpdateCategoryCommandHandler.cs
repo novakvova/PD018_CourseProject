@@ -53,13 +53,13 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory {
                     countUpdated++;
 
                     try {
-                        await fileService.DeleteFileAsync(category.Image);
+                        await fileService.DeleteImagesAsync(category.Image);
                     }
                     catch ( NotFoundException e ) {
                         logger.LogWarning($"{nameof(CategoryEntity)} with key {category.Id} was updated, but image {category.Image} not found");
                     }
 
-                    category.Image = await fileService.UploadFileAsync(
+                    category.Image = await fileService.UploadImageAsync(
                         nameof(CategoryEntity),
                         request.ImageContent);
                 }

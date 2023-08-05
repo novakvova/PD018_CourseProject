@@ -30,7 +30,7 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory {
             await dbContext.SaveChangesAsync(cancellationToken);
 
             try {
-                await fileService.DeleteFileAsync(category.Image);
+                await fileService.DeleteImagesAsync(category.Image);
             }
             catch ( NotFoundException e ) {
                 logger.LogWarning($"{nameof(CategoryEntity)} with key {category.Id} was deleted, but image {category.Image} not found");

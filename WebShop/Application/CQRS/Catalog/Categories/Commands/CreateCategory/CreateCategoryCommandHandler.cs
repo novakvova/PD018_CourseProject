@@ -14,7 +14,7 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory {
         }
 
         public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken) {
-            var image = await fileService.UploadFileAsync(
+            var image = await fileService.UploadImageAsync(
                 nameof(CategoryEntity),
                 request.ImageContent);
 

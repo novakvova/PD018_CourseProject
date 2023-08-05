@@ -10,7 +10,7 @@ using WebShop.Application.Common.Interfaces;
 
 namespace WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct {
     public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand> {
-        public CreateProductCommandValidator(ICatalogDbContext db) {
+        public CreateProductCommandValidator(ICatalogDbContext db, IFileService fileService) {
             RuleFor(c => c.Title)
                 .NotEmpty()
                 .MinimumLength(2)
@@ -33,9 +33,8 @@ namespace WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct {
 
             RuleForEach(p => p.Images)
                 .NotEmpty()
-                .Must(BeImage)
-                .WithMessage("File is not image.");
-
+                .MustAsync(async (s, ct) => await fileService.IsImage(s) == true)
+                .WithMessage("Image is corrupted, in a bad format or has another problem");
         }
 
         private bool BeValidUrl(string? url) {

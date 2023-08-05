@@ -36,7 +36,7 @@ namespace WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct {
 
             int priority = 0;
             foreach ( var formImageStream in request.Images ) {
-                var imageUri = await fileService.UploadFileAsync(
+                var imageUri = await fileService.UploadImageAsync(
                     nameof(ProductEntity),
                     formImageStream);
 
