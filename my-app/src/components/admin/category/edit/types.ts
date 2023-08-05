@@ -1,12 +1,12 @@
 export interface ICategoryEdit {
   id: number;
-  name: string;
+  title: string;
   image: File | null | string;
-  description: string;
+  details: string;
 }
 
 export interface ICategoryEditErrror {
-  name: string;
-  description: string;
+  title: string;
+  details: string;
   image: string;
 }

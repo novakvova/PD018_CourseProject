@@ -19,32 +19,33 @@ const CategoryEditPage = () => {
 
   const [editCategory, setEditCategory] = useState<ICategoryEdit>({
     id: -1,
-    name: "",
-    description: "",
+    title: "",
+    details: "",
     image: null,
   });
 
   const [toSendCategory, setToSendCategory] = useState<any>({});
 
   const [errors, setErrors] = useState<ICategoryEditErrror>({
-    name: "",
-    description: "",
+    title: "",
+    details: "",
     image: "",
   });
 
   useEffect(() => {
     setIsLoading(true);
     http_common
-      .get<ICategoryItem>(`${APP_ENV.BASE_URL}api/category/${id}`)
+      .get<ICategoryItem>(`${APP_ENV.BASE_URL}api/category/get/${id}`)
       .then((resp: any) => {
         let initCategory = resp.data;
         console.log("Сервак дав 1 category", initCategory);
         setIsLoading(false);
         setEditCategory({
           id: initCategory.id,
-          name: initCategory.name,
-          description: initCategory.description,
-          image: "/storage/" + initCategory.image,
+          title: initCategory.title,
+          details: initCategory.details,
+          image:
+            APP_ENV.BASE_URL + "api/Files/Get/" + initCategory.image + "/1200",
         });
       })
       .catch((e: any) => {
@@ -56,17 +57,18 @@ const CategoryEditPage = () => {
   }, []);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setEditCategory({ ...editCategory, [e.target.name]: e.target.value });
-    setToSendCategory({ ...toSendCategory, [e.target.name]: e.target.value });
+    setEditCategory({ ...editCategory, [e.target.title]: e.target.value });
+    setToSendCategory({ ...toSendCategory, [e.target.title]: e.target.value });
   };
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     console.log("CategoryEditPAge onSUbmitHAndler");
     e.preventDefault();
     setIsLoading(true);
-    setErrors({ name: "", description: "", image: "" });
+    setErrors({ title: "", details: "", image: "" });
+    toSendCategory.categoryId = id;
     http_common
-      .post(`${APP_ENV.BASE_URL}api/category/${id}`, toSendCategory, {
+      .patch(`${APP_ENV.BASE_URL}api/category/update`, toSendCategory, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -127,45 +129,45 @@ const CategoryEditPage = () => {
               disabled={true}
               type="text"
               className={classNames("form-control", {
-                "is-invalid": errors.name,
+                "is-invalid": errors.title,
               })}
               value={editCategory.id}
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">
+            <label htmlFor="title" className="form-label">
               Наза
             </label>
             <input
               type="text"
               className={classNames("form-control", {
-                "is-invalid": errors.name,
+                "is-invalid": errors.title,
               })}
-              id="name"
-              name="name"
-              value={editCategory.name}
+              id="title"
+              name="title"
+              value={editCategory.title}
               onChange={onChangeHandler}
             />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
+            {errors.title && (
+              <div className="invalid-feedback">{errors.title}</div>
             )}
           </div>
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">
+            <label htmlFor="details" className="form-label">
               Опис
             </label>
             <input
               type="text"
-              id="description"
+              id="details"
               className={classNames("form-control", {
-                "is-invalid": errors.description,
+                "is-invalid": errors.details,
               })}
-              name="description"
-              value={editCategory.description}
+              name="details"
+              value={editCategory.details}
               onChange={onChangeHandler}
             />
-            {errors.description && (
-              <div className="invalid-feedback">{errors.description}</div>
+            {errors.details && (
+              <div className="invalid-feedback">{errors.details}</div>
             )}
           </div>
           <div className="mb-3">

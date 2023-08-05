@@ -37,7 +37,7 @@ const CategoryListPage = () => {
         setIsLoading(false);
         console.log("Сервак дав дані", resp);
         setList(resp.data.categories);
-       // setData(resp.data);
+        // setData(resp.data);
       })
       .catch((e) => {
         console.log("get categories from server error: ", e);
@@ -77,7 +77,10 @@ const CategoryListPage = () => {
       <td>{category.id}</td>
       <td>{category.name}</td>
       <td>
-        <img src={APP_ENV.BASE_URL + "api/Files/Get/" + category.image} width={50} />
+        <img
+          src={APP_ENV.BASE_URL + "api/Files/Get/" + category.image + "/50"}
+          width={50}
+        />
       </td>
       <td>{category.description}</td>
       <td>
