@@ -122,9 +122,6 @@ public class FileService : IFileService {
     }
 
     public async Task<bool> IsImageExistAsync(string context, string filename, int size) {
-        if ( size == 0 ) {
-            return await IsFileExistAsync(context, $"{imageSizes.Max()}_{filename}");
-        }
         return await IsFileExistAsync(context, $"{size}_{filename}");
     }
 
