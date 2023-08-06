@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebShop.Application.CQRS.Catalog.Products.Commands.CreateProduct;
 using WebShop.Application.CQRS.Catalog.Products.Commands.DeleteProduct;
 using WebShop.Application.CQRS.Catalog.Products.Commands.UpdateProduct;
 using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductDetails;
 using WebShop.Application.CQRS.Catalog.Products.Queries.GetProductSearch;
+using WebShop.Domain.Constants;
 using WebShop.Dto.Catalog.Product;
 using WebShop.WebAPI.DTO.Catalog.Product;
 
@@ -40,6 +42,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult<int>> Create([FromForm] CreateProductDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateProductCommand>(dto);
@@ -49,6 +52,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult> Delete([FromBody] DeleteProductDto dto) {
             var command = mapper.Map<DeleteProductCommand>(dto);
             await Mediator.Send(command);
@@ -56,6 +60,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPatch]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult> Update([FromForm] UpdateProductDto dto) {
             var command = mapper.Map<UpdateProductCommand>(dto);
             await Mediator.Send(command);
