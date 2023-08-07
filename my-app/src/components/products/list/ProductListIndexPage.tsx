@@ -6,10 +6,7 @@ import ReactLoading from "react-loading";
 import dayjs from "dayjs";
 import { http_common } from "../../../services/tokenService";
 import { APP_ENV } from "../../../env";
-import {
-  IProductGetResult,
-  IProductItem,
-} from "../../admin/product/list/types";
+import { IProductGetResult, IProductItem } from "./types";
 
 const ProductListIndexPage = () => {
   const deleteDialog = useRef();
@@ -35,12 +32,12 @@ const ProductListIndexPage = () => {
     setIsLoading(true);
     http_common
       .get<IProductGetResult>(
-        `${APP_ENV.BASE_URL}api/product?page=${localpage}`
+        `${APP_ENV.BASE_URL}api/product/search?page=${localpage}`
       )
       .then((resp) => {
         setIsLoading(false);
         console.log("Сервак дав дані", resp);
-        setList(resp.data.data);
+        setList(resp.data.products);
         setData(resp.data);
       })
       .catch((e) => {
@@ -53,28 +50,25 @@ const ProductListIndexPage = () => {
 
   console.log("Render component");
 
-  const paginationData = data?.links.map((l) => (
-    <li
-      key={Math.random()}
-      className={classNames("page-item", {
-        active: l.active,
-        disabled: l.url == null,
-      })}
-    >
-      <Link
-        to={
-          l.url
-            ? `/page/${new URLSearchParams(new URL(l.url as string).search).get(
-                "page"
-              )}`
-            : ""
-        }
-        className="page-link"
-      >
-        {l.label.replace("&laquo; ", "").replace(" &raquo;", "")}
-      </Link>
-    </li>
-  ));
+  var paginationData: React.JSX.Element[] = [];
+  const totalPages = data?.pages as number;
+  const currentPage = data?.currentPage as number;
+  for (let page = 1; page <= totalPages; page++) {
+    paginationData.push(
+      <>
+        <li
+          key={Math.random()}
+          className={classNames("page-item", {
+            active: page == currentPage,
+          })}
+        >
+          <Link to={`/page/${page}`} className="page-link">
+            {page}
+          </Link>
+        </li>
+      </>
+    );
+  }
 
   const viewData = list.map((product) => (
     <div
@@ -105,15 +99,15 @@ const ProductListIndexPage = () => {
             ))}
           </div>
           <div className="carousel-inner">
-            {product.images.map((i) => (
+            {product.images.map((i, num) => (
               <div
                 className={classNames("carousel-item", {
-                  active: i.priority == 0,
+                  active: num == 0,
                 })}
                 key={Math.random()}
               >
                 <img
-                  src={APP_ENV.BASE_URL + "/storage/" + i.name}
+                  src={APP_ENV.BASE_URL + "api/files/get/" + i + "/600"}
                   className="d-block w-100"
                   alt="..."
                 ></img>
@@ -148,10 +142,21 @@ const ProductListIndexPage = () => {
       </div>
 
       <div className="card-body">
-        <h5 className="card-title">{product.name}</h5>
-        <h6 className="card-subtitle mb-2 text-muted">
-          {product.category.title}
-        </h6>
+        <h5 className="card-title">{product.title}</h5>
+        <div className="d-flex align-bottom">
+          {/* <img
+            src={
+              APP_ENV.BASE_URL +
+              "api/Files/Get/" +
+              product.category.image +
+              "/50"
+            }
+            width={50}
+          /> */}
+          <h6 className="card-subtitle mb-2 text-muted">
+            {product.category.title}
+          </h6>
+        </div>
       </div>
       <Link
         to={`/admin/product/delete/${product.id}`}

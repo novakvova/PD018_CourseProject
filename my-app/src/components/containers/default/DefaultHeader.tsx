@@ -71,7 +71,6 @@ const DefaultHeader = () => {
                     Admin
                   </Link>
                 )}
-                )
                 <Link
                   to={"/auth/signout"}
                   className="btn btn-outline-secondary  me-2"

@@ -32,7 +32,7 @@ const ProductListPage = () => {
     setIsLoading(true);
     http_common
       .get<IProductGetResult>(
-        `${APP_ENV.BASE_URL}api/product?page=${localpage}`
+        `${APP_ENV.BASE_URL}api/products/get?page=${localpage}`
       )
       .then((resp) => {
         setIsLoading(false);
