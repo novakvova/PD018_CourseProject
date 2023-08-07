@@ -19,8 +19,12 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory {
                 .MaximumLength(200);
 
             RuleFor(c => c.ImageContent)
-            .NotEmpty()
-                .MustAsync(async (s, ct) => await fileService.IsImage(s) == true)
+                .MustAsync(async (s, ct) => {
+                    if (s == null)
+                        return true;
+
+                    return await fileService.IsImage(s) == true;
+                })
                 .WithMessage("Image is corrupted, in a bad format or has another problem");
         }
     }

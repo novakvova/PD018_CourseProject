@@ -26,7 +26,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult> SignIn([FromForm] SignInUserDto dto) {
+        public async Task<ActionResult> SignIn([FromBody] SignInUserDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<SignInUserCommand>(dto);
             var result = await Mediator.Send(command);
