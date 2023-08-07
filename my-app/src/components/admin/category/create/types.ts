@@ -7,7 +7,19 @@ export interface ICategoryCreate {
 }
 
 export interface ICategoryCreateErrror {
+  title: string[] | undefined;
+  details: string[] | undefined;
+  image: string[] | undefined;
+}
+
+export interface ICategoryCreateErrrorBackend {
+  Title: string[] | undefined;
+  Details: string[] | undefined;
+  Image: string[] | undefined;
+}
+
+export interface ICategoryCreateErrorResponce {
+  errors: ICategoryCreateErrrorBackend;
+  status: number;
   title: string;
-  details: string;
-  image: string;
 }

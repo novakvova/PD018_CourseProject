@@ -42,6 +42,6 @@ export const isSignedIn = (): boolean => {
 export var http_common = axios.create({
   baseURL: APP_ENV.BASE_URL,
   headers: {
-    Authorization: `Bearer ${getToken()}`,
+    Authorization: `${getToken()}`,
   },
 });

@@ -18,9 +18,7 @@ const root = ReactDOM.createRoot(
 
 if (localStorage.token) {
   const user = jwtDecode(localStorage.token) as IUser;
-  http_common.defaults.headers[
-    "Authorization"
-  ] = `Bearer ${localStorage.token}`;
+  http_common.defaults.headers["Authorization"] = `${localStorage.token}`;
 
   store.dispatch({
     type: AuthUserActionType.LOGIN_USER,
