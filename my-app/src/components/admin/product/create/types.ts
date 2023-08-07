@@ -2,14 +2,16 @@ import { SyntheticEvent } from "react";
 
 export interface IProductCreate {
   category_id: number | undefined;
-  name: string;
+  title: string;
   price: number;
-  description: string;
+  details: string;
+  images: any;
 }
 
 export interface IProductCreateError {
   category_id: string[];
-  name: string[];
-  price: string[];
-  description: string[];
+  Title: string[];
+  Price: string[];
+  Details: string[];
+  Images: File[];
 }

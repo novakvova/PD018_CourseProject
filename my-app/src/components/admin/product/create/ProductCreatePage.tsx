@@ -18,14 +18,14 @@ const ProductCreatePage = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [imageError, setImageError] = useState<string>();
   const [initValues, setInitValues] = useState<IProductCreate>({
-    name: "",
-    description: "",
+    title: "",
+    details: "",
     category_id: undefined,
     price: 0,
+    images: [],
   });
   const [images, setImages] = useState<File[]>([]);
   const [imagesUrl, setImagesUrl] = useState<string[]>([]);
-  const [categoriesPage, setCategoriesPage] = useState<number>(1);
   const [categories, setCategories] = useState<ICategoryItem[]>([]);
 
   const productCreateSchema = yup.object({
@@ -36,11 +36,10 @@ const ProductCreatePage = () => {
   });
 
   const loadMoreCategoriesAsync = async () => {
-    const result = await http_common.get<ICategoryGetResult[]>(
-      `${APP_ENV.BASE_URL}api/category?page=${categoriesPage}`
+    const result = await http_common.get<ICategoryGetResult>(
+      `${APP_ENV.BASE_URL}api/category/search?page=${1}&pageSize=100`
     );
-    setCategories((prev) => [...prev, ...(result.data as any).data]);
-    setCategoriesPage(categoriesPage + 1);
+    setCategories(result.data.categories);
   };
 
   useEffect(() => {
@@ -63,17 +62,16 @@ const ProductCreatePage = () => {
 
   const onSubmitFormikData = async (values: IProductCreate) => {
     try {
-      await setIsProcessing(true);
-      var resp = await http_common.post(`api/product`, values);
-      var created = resp.data as IProductItem;
-      console.log("resp = ", created);
-
-      const formData = new FormData();
+      var formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("details", values.details);
+      formData.append("price", values.price.toString());
+      formData.append("categoryId", values.category_id?.toString() as string);
       images.forEach((i) => {
-        formData.append("images[]", i);
+        formData.append("images", i);
       });
-      var uploadImagesResult = await http_common.post(
-        `api/product/${created.id}/images`,
+      var resp = await http_common.post(
+        `${APP_ENV.BASE_URL}api/product/create`,
         formData,
         {
           headers: {
@@ -81,7 +79,24 @@ const ProductCreatePage = () => {
           },
         }
       );
-      console.log("images upload result:", uploadImagesResult);
+
+      var created = resp.data as IProductItem;
+      console.log("resp = ", created);
+
+      // const formData = new FormData();
+      // images.forEach((i) => {
+      //   formData.append("images[]", i);
+      // });
+      // var uploadImagesResult = await http_common.post(
+      //   `api/product/${created.id}/images`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
+      // console.log("images upload result:", uploadImagesResult);
 
       navigator("..");
       await setIsProcessing(false);
@@ -91,15 +106,15 @@ const ProductCreatePage = () => {
       console.log("product create server error", error);
       setResponceError(error);
       errors.category_id = error.category_id?.join(", ");
-      errors.description = error.description?.join(", ");
-      errors.name = error.name?.join(", ");
-      errors.price = error.price?.join(", ");
+      errors.details = error.Details?.join(", ");
+      errors.title = error.Title?.join(", ");
+      errors.price = error.Price?.join(", ");
       await setIsProcessing(false);
     }
   };
   const formik = useFormik({
     initialValues: initValues,
-    validationSchema: productCreateSchema,
+    // validationSchema: productCreateSchema,
     onSubmit: onSubmitFormikData,
   });
   const { values, errors, touched, handleSubmit, handleChange } = formik;
@@ -182,39 +197,39 @@ const ProductCreatePage = () => {
       {!isProcessing && (
         <form className="col-md-6 offset-md-3" onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">
+            <label htmlFor="title" className="form-label">
               Назва
             </label>
             <input
               type="text"
               className={classNames("form-control", {
-                "is-invalid": errors.name,
+                "is-invalid": errors.title,
               })}
-              id="name"
-              name="name"
-              value={values.name}
+              id="title"
+              name="title"
+              value={values.title}
               onChange={handleChange}
             />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
+            {errors.title && (
+              <div className="invalid-feedback">{errors.title}</div>
             )}
           </div>
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">
+            <label htmlFor="details" className="form-label">
               Опис
             </label>
             <input
               type="text"
-              id="description"
+              id="details"
               className={classNames("form-control", {
-                "is-invalid": errors.description,
+                "is-invalid": errors.details,
               })}
-              name="description"
-              value={values.description}
+              name="details"
+              value={values.details}
               onChange={handleChange}
             />
-            {errors.description && (
-              <div className="invalid-feedback">{errors.description}</div>
+            {errors.details && (
+              <div className="invalid-feedback">{errors.details}</div>
             )}
           </div>
           <div className="mb-3">
@@ -239,15 +254,6 @@ const ProductCreatePage = () => {
             <label htmlFor="category_id" className="form-label">
               Категорія
             </label>
-            <button
-              type="button"
-              onClick={async () => {
-                await loadMoreCategoriesAsync();
-              }}
-              className="btn btn-secondary"
-            >
-              Загрузити більше категорій
-            </button>
             <select
               required={true}
               onChange={handleChange}

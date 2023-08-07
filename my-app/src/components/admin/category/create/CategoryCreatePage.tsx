@@ -27,7 +27,7 @@ const CategoryCreatePage = () => {
   });
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setDto({ ...dto, [e.target.name]: e.target.value });
+    setDto({ ...dto, [e.target.title]: e.target.value });
   };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {

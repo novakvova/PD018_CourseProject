@@ -37,7 +37,7 @@ const AdminSidebar = () => {
             <li className="nav-item">
               <Link
                 to={"./user"}
-                className="nav-link d-flex align-items-center gap-2"
+                className="nav-link d-flex align-items-center gap-2 disabled"
               >
                 <i className={"bi bi-people"}></i>
                 Users
