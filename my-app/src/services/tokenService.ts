@@ -1,9 +1,11 @@
-import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 import jwt from "jsonwebtoken";
 import jwtDecode from "jwt-decode";
 import { APP_ENV } from "../env";
 import { useDispatch } from "react-redux";
 import { AuthUserActionType, IUser } from "../components/auth/types";
+import { error } from "console";
 
 export const storeToken = (token: string) => {
   console.log("store token");
@@ -45,3 +47,14 @@ export var http_common = axios.create({
     Authorization: `${getToken()}`,
   },
 });
+
+http_common.interceptors.response.use(
+  (responce) => responce,
+  (error: AxiosError) => {
+    console.log("catched", error);
+    if (error.code == "ERR_NETWORK") {
+      window.location.href = "/auth/login";
+    }
+    return Promise.reject(error);
+  }
+);

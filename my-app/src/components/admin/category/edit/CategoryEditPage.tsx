@@ -1,7 +1,11 @@
 import classNames from "classnames";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ICategoryEdit, ICategoryEditErrror } from "./types";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  ICategoryEdit,
+  ICategoryEditErrorResponce,
+  ICategoryEditErrror,
+} from "./types";
 import { ICategoryItem } from "../list/types";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.min.css";
@@ -9,6 +13,7 @@ import ReactLoading from "react-loading";
 import { APP_ENV } from "../../../../env";
 import { http_common } from "../../../../services/tokenService";
 import CropperDialog from "../../../common/CropperDialog";
+import { AxiosError } from "axios";
 
 const CategoryEditPage = () => {
   const navigator = useNavigate();
@@ -27,9 +32,9 @@ const CategoryEditPage = () => {
   const [toSendCategory, setToSendCategory] = useState<any>({});
 
   const [errors, setErrors] = useState<ICategoryEditErrror>({
-    title: "",
-    details: "",
-    image: "",
+    title: undefined,
+    details: undefined,
+    image: undefined,
   });
 
   useEffect(() => {
@@ -57,15 +62,15 @@ const CategoryEditPage = () => {
   }, []);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setEditCategory({ ...editCategory, [e.target.title]: e.target.value });
-    setToSendCategory({ ...toSendCategory, [e.target.title]: e.target.value });
+    setEditCategory({ ...editCategory, [e.target.name]: e.target.value });
+    setToSendCategory({ ...toSendCategory, [e.target.name]: e.target.value });
   };
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     console.log("CategoryEditPAge onSUbmitHAndler");
     e.preventDefault();
     setIsLoading(true);
-    setErrors({ title: "", details: "", image: "" });
+    setErrors({ title: undefined, details: undefined, image: undefined });
     toSendCategory.categoryId = id;
     http_common
       .patch(`${APP_ENV.BASE_URL}api/category/update`, toSendCategory, {
@@ -78,10 +83,22 @@ const CategoryEditPage = () => {
         navigator("../..");
       })
       .catch((er: any) => {
-        const errors = er.response.data as ICategoryEditErrror;
-        setErrors(errors);
-        console.log("Server update error ", errors);
+        const error = er as AxiosError;
+
+        console.log(error);
         setIsLoading(false);
+        if (error.code == "ERR_NETWORK") {
+          console.log("network error", error);
+        }
+        if (error.code == "ERR_BAD_REQUEST") {
+          const responce = er.response.data as ICategoryEditErrorResponce;
+          var errs: ICategoryEditErrror = {
+            title: responce.errors.Title,
+            details: responce.errors.Details,
+            image: responce.errors.ImageContent,
+          };
+          setErrors(errs);
+        }
       });
     //console.log("Submit data", dto);
   };
@@ -128,9 +145,7 @@ const CategoryEditPage = () => {
             <input
               disabled={true}
               type="text"
-              className={classNames("form-control", {
-                "is-invalid": errors.title,
-              })}
+              className={classNames("form-control", {})}
               value={editCategory.id}
             />
           </div>
@@ -141,15 +156,16 @@ const CategoryEditPage = () => {
             <input
               type="text"
               className={classNames("form-control", {
-                "is-invalid": errors.title,
+                "is-invalid":
+                  errors.title != undefined && errors.title?.length > 0,
               })}
               id="title"
               name="title"
               value={editCategory.title}
               onChange={onChangeHandler}
             />
-            {errors.title && (
-              <div className="invalid-feedback">{errors.title}</div>
+            {errors.title != undefined && errors.title?.length > 0 && (
+              <div className="invalid-feedback">{errors.title.join()}</div>
             )}
           </div>
           <div className="mb-3">
@@ -160,14 +176,15 @@ const CategoryEditPage = () => {
               type="text"
               id="details"
               className={classNames("form-control", {
-                "is-invalid": errors.details,
+                "is-invalid":
+                  errors.details != undefined && errors.details?.length > 0,
               })}
               name="details"
               value={editCategory.details}
               onChange={onChangeHandler}
             />
-            {errors.details && (
-              <div className="invalid-feedback">{errors.details}</div>
+            {errors.details != undefined && errors.details?.length > 0 && (
+              <div className="invalid-feedback">{errors.details.join()}</div>
             )}
           </div>
           <div className="mb-3">
@@ -177,12 +194,15 @@ const CategoryEditPage = () => {
             <CropperDialog
               imageUri={editCategory.image as string}
               onSave={onImageChangeHandler}
-              error={errors.image}
+              error={errors.image?.join() as string}
             ></CropperDialog>
           </div>
-          <button type="submit" className="btn btn-danger">
+          <button type="submit" className="btn btn-danger me-1">
             Save edit
           </button>
+          <Link to={"../.."} className="btn btn-secondary">
+            Cancel
+          </Link>
         </form>
       )}
     </>
