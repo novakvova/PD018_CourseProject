@@ -8,6 +8,7 @@ using WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
 using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategorySearch;
+using WebShop.Domain.Constants;
 using WebShop.Dto.Catalog.Category;
 using WebShop.WebAPI.DTO.Catalog.Category;
 
@@ -29,6 +30,7 @@ namespace WebShop.WebAPI.Controllers {
             return Ok(result);
         }
 
+        [Obsolete]
         [HttpGet]
         public async Task<ActionResult<CategoryListVm>> GetAll() {
             // forming query from http request
@@ -56,6 +58,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult<int>> Create([FromForm] CreateCategoryDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateCategoryCommand>(dto);
@@ -65,6 +68,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPatch]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult> Update([FromForm] UpdateCategoryDto dto) {
             var command = mapper.Map<UpdateCategoryCommand>(dto);
             await Mediator.Send(command);
@@ -72,6 +76,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult> Delete([FromBody] DeleteCategoryDto dto) {
             var command = mapper.Map<DeleteCategoryCommand>(dto);
             await Mediator.Send(command);

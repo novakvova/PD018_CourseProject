@@ -1,6 +1,7 @@
 ﻿using WebShop.Application.Common.Interfaces;
 using WebShop.Domain.Entities;
 using WebShop.Domain.Events;
+using WebShop.Domain.Events.Category;
 
 namespace WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, int> {
@@ -13,7 +14,7 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory {
         }
 
         public async Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken) {
-            var image = await fileService.UploadFileAsync(
+            var image = await fileService.UploadImageAsync(
                 nameof(CategoryEntity),
                 request.ImageContent);
 

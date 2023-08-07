@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebShop.Application.Common.Mappings;
 using WebShop.Application.Common.Interfaces;
+using WebShop.Domain.Entities;
 using WebShop.Persistance.Data.Contexts.Initialisers;
 using Microsoft.OpenApi.Models;
 
@@ -31,8 +32,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(o => {
     o.AddSecurityDefinition("Bearer",
-        new OpenApiSecurityScheme
-        {
+        new OpenApiSecurityScheme {
             In = ParameterLocation.Header,
             Description = @"Bearer (paste here your token (remove all brackets) )",
             Name = "Authorization",
@@ -55,8 +55,7 @@ builder.Services.AddSwaggerGen(o => {
             new List<string>()
         }
     });
-    o.SwaggerDoc("v1", new OpenApiInfo()
-    {
+    o.SwaggerDoc("v1", new OpenApiInfo() {
         Title = "WebShop API - v1",
         Version = "v1"
     });
@@ -74,6 +73,10 @@ builder.Services.AddCors(options => {
 var app = builder.Build();
 
 await app.InitialiseDatabaseAsync();
+
+// ensure upload folders exists
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(CategoryEntity)}");
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(ProductEntity)}");
 
 // Configure the HTTP request pipeline.
 if ( app.Environment.IsDevelopment() ) {

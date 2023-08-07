@@ -12,12 +12,13 @@ namespace WebShop.WebAPI.Controllers {
             this.mapper = mapper;
         }
 
-        [HttpGet("{context}/{filename}")]
-        public async Task<ActionResult> Get(string context, string filename) {
+        [HttpGet("{context}/{filename}/{size}")]
+        public async Task<ActionResult> Get(string context, string filename, int size) {
             // forming query from http request
             var query = new GetImageQuery {
                 Context = context,
-                FileName = filename
+                FileName = filename,
+                Size = size
             };
 
             // get result from Mediator request handler

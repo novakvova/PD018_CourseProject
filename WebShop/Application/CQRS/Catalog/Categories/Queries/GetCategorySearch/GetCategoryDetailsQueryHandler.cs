@@ -15,7 +15,8 @@ namespace WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategorySearch 
             var total = await query.CountAsync();
             var pages = (int)Math.Ceiling(total / (double)request.PageSize);
             query = query
-                .Skip(( request.Page - 1 ) * request.PageSize)
+                .OrderBy(x => x.Id)
+                .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
 
             var list = await query
