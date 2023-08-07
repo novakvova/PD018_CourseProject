@@ -10,6 +10,6 @@ export interface ILoginRequestError {
 }
 
 export interface ILoginResponce {
-  access_token: string;
-  expires_in: number;
+  token: string;
+  firstName: string;
 }

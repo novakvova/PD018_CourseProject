@@ -2,7 +2,7 @@ import "./admin.scss";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import DefaultHeader from "./AdminHeader";
 import { useEffect } from "react";
-import { isSignedIn } from "../../../services/tokenService";
+import { isAdmin, isSignedIn } from "../../../services/tokenService";
 import { useSelector } from "react-redux";
 import { IAuthUser } from "../../auth/types";
 import AdminHeader from "./AdminHeader";
@@ -15,13 +15,19 @@ const AdminLayout = () => {
   const location = useLocation();
   const currentRoute = location.pathname;
 
-  // useEffect(() => {
-  //   console.log("DefaultLayout useEffect");
-  //   console.log("current route:", currentRoute);
-  //   if (isAuth == false) {
-  //     navigator(`/auth/login?forwardTo=${currentRoute}`);
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log("AdminLayout useEffect");
+    console.log("current route:", currentRoute);
+    if (isAuth == false) {
+      console.log("user is not authenticated to admin panel");
+      navigator(`/auth/login?forwardTo=${currentRoute}`);
+    } else if (isAdmin(user) == false) {
+      console.log("user is not authorized to admin panel");
+      navigator(`/`);
+    } else {
+      console.log("user can go to admin panel");
+    }
+  }, []);
 
   return (
     <>

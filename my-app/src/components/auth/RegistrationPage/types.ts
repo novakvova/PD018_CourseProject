@@ -1,11 +1,8 @@
 export interface IRegistrationRequest {
   email: string;
-  tel: string;
-  photo: File | null;
   password: string;
-  password_confirmation: string;
-  name: string;
-  surname: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface IRegistrationRequestError {

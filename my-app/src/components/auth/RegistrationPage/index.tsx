@@ -30,34 +30,24 @@ const RegistrationPage = () => {
 
   const initValues: IRegistrationRequest = {
     email: "",
-    tel: "",
-    photo: null,
     password: "",
-    password_confirmation: "",
-    name: "",
-    surname: "",
+    firstName: "",
+    lastName: "",
   };
 
   const [responceError, setResponceError] = useState<string>();
 
   const registrationSchema = yup.object({
     email: yup.string().required("Enter email").email("Пошта вказана не вірно"),
-    tel: yup.string().required("Enter phone number"), // todo add regex validation
     password: yup.string().required("Enter password"),
-    password_confirmation: yup
-      .string()
-      .required("Repeat password")
-      .test("is-same-passwords", "Passwords does not match", (value) => {
-        return true;
-      }),
-    name: yup.string().required("Enter name"),
-    surname: yup.string().required("Enter surname"),
+    firstName: yup.string().required("Enter first name"),
+    lastName: yup.string().required("Enter last name"),
   });
 
   const onSubmitFormikData = async (values: IRegistrationRequest) => {
     try {
       await setIsProcessing(true);
-      var resp = await http_common.post(`api/auth/register`, values, {
+      var resp = await http_common.post(`api/auth/signup`, values, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -78,10 +68,6 @@ const RegistrationPage = () => {
   });
 
   const { values, errors, touched, handleSubmit, handleChange } = formik;
-
-  const onImageChange = (file: File) => {
-    values.photo = file;
-  };
 
   return (
     <div className="d-flex justify-content-center">
@@ -109,57 +95,39 @@ const RegistrationPage = () => {
           <form onSubmit={handleSubmit}>
             <div className="wrapper">
               <div className="mb-3">
-                <label htmlFor="name" className="form-label">
-                  Name
+                <label htmlFor="firstName" className="form-label">
+                  FirstName
                 </label>
                 <input
                   type="text"
                   className={classNames("form-control", {
-                    "is-invalid": errors.name && touched.name,
+                    "is-invalid": errors.firstName && touched.firstName,
                   })}
-                  id="name"
-                  name="name"
-                  value={values.name}
+                  id="firstName"
+                  name="firstName"
+                  value={values.firstName}
                   onChange={handleChange}
                 />
-                {errors.name && (
-                  <div className="invalid-feedback">{errors.name}</div>
+                {errors.firstName && (
+                  <div className="invalid-feedback">{errors.firstName}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="surname" className="form-label">
-                  Surname
+                <label htmlFor="lastName" className="form-label">
+                  LastName
                 </label>
                 <input
                   type="text"
                   className={classNames("form-control", {
-                    "is-invalid": errors.surname && touched.surname,
+                    "is-invalid": errors.lastName && touched.lastName,
                   })}
-                  id="surname"
-                  name="surname"
-                  value={values.surname}
+                  id="lastName"
+                  name="lastName"
+                  value={values.lastName}
                   onChange={handleChange}
                 />
-                {errors.surname && (
-                  <div className="invalid-feedback">{errors.surname}</div>
-                )}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="tel" className="form-label">
-                  Telephone
-                </label>
-                <input
-                  type="tel"
-                  className={classNames("form-control", {
-                    "is-invalid": errors.tel && touched.tel,
-                  })}
-                  id="tel"
-                  name="tel"
-                  value={values.tel}
-                  onChange={handleChange}
-                />
-                {errors.tel && (
-                  <div className="invalid-feedback">{errors.tel}</div>
+                {errors.lastName && (
+                  <div className="invalid-feedback">{errors.lastName}</div>
                 )}
               </div>
               <div className="mb-3">
@@ -199,43 +167,8 @@ const RegistrationPage = () => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="password_confirmation" className="form-label">
-                  Repeat password
-                </label>
-                <input
-                  type="password"
-                  id="password_confirmation"
-                  className={classNames("form-control", {
-                    "is-invalid":
-                      errors.password_confirmation &&
-                      touched.password_confirmation,
-                  })}
-                  name="password_confirmation"
-                  value={values.password_confirmation}
-                  onChange={handleChange}
-                />
-                {errors.password_confirmation && (
-                  <div className="invalid-feedback">
-                    {errors.password_confirmation}
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Photo</label>
-                <CropperDialog
-                  onSave={onImageChange}
-                  error={
-                    errors.photo === undefined
-                      ? ""
-                      : touched.photo == true
-                      ? errors.photo
-                      : ""
-                  }
-                ></CropperDialog>
-              </div>
-              <div className="mb-3">
                 <button type="submit" className="btn btn-primary w-100">
-                  Sign up!
+                  Sign up
                 </button>
               </div>
 

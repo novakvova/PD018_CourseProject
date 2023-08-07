@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import jwtDecode from "jwt-decode";
 import { APP_ENV } from "../env";
 import { useDispatch } from "react-redux";
-import { AuthUserActionType } from "../components/auth/types";
+import { AuthUserActionType, IUser } from "../components/auth/types";
 
 export const storeToken = (token: string) => {
   console.log("store token");
@@ -23,6 +23,14 @@ export const removeToken = () => {
 export const decodeToken = (token: string) => {
   return jwtDecode(token);
   // return jwt.decode(token);
+};
+
+export const isAdmin = (user: IUser | undefined): boolean => {
+  return (
+    user != null &&
+    user.roles != null &&
+    (user?.roles as string[]).find((r) => r == "Administrator") != null
+  );
 };
 
 export const isSignedIn = (): boolean => {

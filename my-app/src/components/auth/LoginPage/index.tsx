@@ -48,15 +48,16 @@ const LoginPage = () => {
   const onSubmitFormikData = async (values: ILoginRequest) => {
     try {
       await setIsProcessing(true);
-      var resp = await http_common.post(`api/auth/login`, values);
+      var resp = await http_common.post(`api/auth/signin`, values);
       var respData = resp.data as ILoginResponce;
       console.log("resp = ", respData);
-      storeToken(respData.access_token);
-      const user = decodeToken(respData.access_token) as IAuthUser;
+      storeToken(respData.token);
+      const user = decodeToken(respData.token) as IAuthUser;
       dispatch({
         type: AuthUserActionType.LOGIN_USER,
         payload: user,
       });
+      console.log(user);
       await setIsProcessing(false);
 
       if (forwardTo !== undefined && forwardTo !== null) {

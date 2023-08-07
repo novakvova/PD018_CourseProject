@@ -1,6 +1,10 @@
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { http_common, removeToken } from "../../../services/tokenService";
+import {
+  http_common,
+  isAdmin,
+  removeToken,
+} from "../../../services/tokenService";
 import { AuthUserActionType, IAuthUser } from "../../auth/types";
 import { useSelector } from "react-redux";
 
@@ -58,13 +62,16 @@ const DefaultHeader = () => {
             </form>
             {isAuth && (
               <>
-                <Link
-                  to={"/admin"}
-                  className="btn btn-outline-danger  me-2"
-                  aria-current="page"
-                >
-                  Admin
-                </Link>
+                {isAdmin(user) && (
+                  <Link
+                    to={"/admin"}
+                    className="btn btn-outline-danger  me-2"
+                    aria-current="page"
+                  >
+                    Admin
+                  </Link>
+                )}
+                )
                 <Link
                   to={"/auth/signout"}
                   className="btn btn-outline-secondary  me-2"
