@@ -37,7 +37,7 @@ const CategoryListPage = () => {
         setIsLoading(false);
         console.log("Сервак дав дані", resp);
         setList(resp.data.categories);
-        // setData(resp.data);
+        setData(resp.data);
       })
       .catch((e) => {
         console.log("get categories from server error: ", e);
@@ -49,40 +49,38 @@ const CategoryListPage = () => {
 
   console.log("Render component");
 
-  const paginationData = data?.links.map((l) => (
-    <li
-      key={Math.random()}
-      className={classNames("page-item", {
-        active: l.active,
-        disabled: l.url == null,
-      })}
-    >
-      <Link
-        to={
-          l.url
-            ? `/admin/category/page/${new URLSearchParams(
-                new URL(l.url as string).search
-              ).get("page")}`
-            : ""
-        }
-        className="page-link"
-      >
-        {l.label.replace("&laquo; ", "").replace(" &raquo;", "")}
-      </Link>
-    </li>
-  ));
+  var paginationData: React.JSX.Element[] = [];
+  const totalPages = data?.pages as number;
+  const currentPage = data?.currentPage as number;
+  for (let page = 1; page <= totalPages; page++) {
+    paginationData.push(
+      <>
+        <li
+          key={Math.random()}
+          className={classNames("page-item", {
+            active: page == currentPage,
+          })}
+        >
+          <Link to={`/admin/category/page/${page}`} className="page-link">
+            {page}
+          </Link>
+        </li>
+      </>
+    );
+  }
+
+  console.log("paginationData", paginationData);
 
   const viewData = list.map((category) => (
     <tr key={category.id}>
       <td>{category.id}</td>
-      <td>{category.name}</td>
+      <td>{category.title}</td>
       <td>
         <img
           src={APP_ENV.BASE_URL + "api/Files/Get/" + category.image + "/50"}
           width={50}
         />
       </td>
-      <td>{category.description}</td>
       <td>
         <Link
           to={`/admin/category/edit/${category.id}`}
@@ -132,9 +130,10 @@ const CategoryListPage = () => {
             <thead>
               <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Назва</th>
+                <th scope="col" style={{ width: "20vw" }}>
+                  Назва
+                </th>
                 <th scope="col">Фото</th>
-                <th scope="col">Опис</th>
                 <th scope="col"></th>
               </tr>
             </thead>

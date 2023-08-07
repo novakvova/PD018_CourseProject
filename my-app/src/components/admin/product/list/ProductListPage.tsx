@@ -84,8 +84,8 @@ const ProductListPage = () => {
       <td>{product.price}</td>
       <td>
         <img
-          title={product.category?.name}
-          alt={product.category?.name}
+          title={product.category?.title}
+          alt={product.category?.title}
           src={APP_ENV.BASE_URL + "/storage/" + product.category.image}
           width={50}
         />

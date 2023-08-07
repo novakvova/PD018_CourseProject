@@ -150,7 +150,7 @@ const ProductListIndexPage = () => {
       <div className="card-body">
         <h5 className="card-title">{product.name}</h5>
         <h6 className="card-subtitle mb-2 text-muted">
-          {product.category.name}
+          {product.category.title}
         </h6>
       </div>
       <Link

@@ -10,24 +10,24 @@ const CategoryCreatePage = () => {
   const navigator = useNavigate();
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [dto, setDto] = useState<ICategoryCreate>({
-    name: "",
-    description: "",
+    title: "",
+    details: "",
     image: null,
   });
 
   const [errors, setErrors] = useState<ICategoryCreateErrror>({
-    name: "",
-    description: "",
+    title: "",
+    details: "",
     image: "",
   });
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setDto({ ...dto, [e.target.name]: e.target.value });
+    setDto({ ...dto, [e.target.title]: e.target.value });
   };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors({ name: "", description: "", image: "" });
+    setErrors({ title: "", details: "", image: "" });
 
     try {
       setIsProcessing(true);
@@ -81,39 +81,39 @@ const CategoryCreatePage = () => {
       {!isProcessing && (
         <form className="col-md-6 offset-md-3" onSubmit={onSubmitHandler}>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">
+            <label htmlFor="title" className="form-label">
               Наза
             </label>
             <input
               type="text"
               className={classNames("form-control", {
-                "is-invalid": errors.name,
+                "is-invalid": errors.title,
               })}
-              id="name"
-              name="name"
-              value={dto.name}
+              id="title"
+              title="title"
+              value={dto.title}
               onChange={onChangeHandler}
             />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
+            {errors.title && (
+              <div className="invalid-feedback">{errors.title}</div>
             )}
           </div>
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">
+            <label htmlFor="details" className="form-label">
               Опис
             </label>
             <input
               type="text"
-              id="description"
+              id="details"
               className={classNames("form-control", {
-                "is-invalid": errors.description,
+                "is-invalid": errors.details,
               })}
-              name="description"
-              value={dto.description}
+              title="details"
+              value={dto.details}
               onChange={onChangeHandler}
             />
-            {errors.description && (
-              <div className="invalid-feedback">{errors.description}</div>
+            {errors.details && (
+              <div className="invalid-feedback">{errors.details}</div>
             )}
           </div>
           <div className="mb-3">

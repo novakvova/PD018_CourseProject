@@ -139,7 +139,7 @@ const ProductCreatePage = () => {
   // view data
   const categoriesData = categories?.map((l) => (
     <option value={l.id} key={Math.random()}>
-      {l.name}
+      {l.title}
     </option>
   ));
   const imagesPreviewData = imagesUrl?.map((url, index) => (

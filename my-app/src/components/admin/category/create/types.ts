@@ -1,13 +1,13 @@
 import { SyntheticEvent } from "react";
 
 export interface ICategoryCreate {
-  name: string;
+  title: string;
   image: File | null;
-  description: string;
+  details: string;
 }
 
 export interface ICategoryCreateErrror {
-  name: string;
-  description: string;
+  title: string;
+  details: string;
   image: string;
 }
