@@ -20,9 +20,10 @@ const CategoryDeletePage = () => {
     navigator("../..");
   };
   const onSubmitHandler = () => {
+    const deleteBody = { categoryId: id };
     setIsProcessing(true);
     http_common
-      .delete(`${APP_ENV.BASE_URL}api/category/${id}`)
+      .delete(`${APP_ENV.BASE_URL}api/category/delete`, { data: deleteBody })
       .then((resp) => {
         console.log(resp);
         setIsProcessing(false);
