@@ -28,16 +28,16 @@ const ProductListPage = () => {
     if (page == undefined || page == null) localpage = 1;
     else localpage = page;
 
-    console.log("try to get categories from server page " + localpage);
+    console.log("try to get products from server page " + localpage);
     setIsLoading(true);
     http_common
       .get<IProductGetResult>(
-        `${APP_ENV.BASE_URL}api/products/get?page=${localpage}`
+        `${APP_ENV.BASE_URL}api/product/search?page=${localpage}`
       )
       .then((resp) => {
         setIsLoading(false);
         console.log("Сервак дав дані", resp);
-        setList(resp.data.data);
+        setList(resp.data.products);
         setData(resp.data);
       })
       .catch((e) => {
@@ -50,48 +50,44 @@ const ProductListPage = () => {
 
   console.log("Render component");
 
-  const paginationData = data?.links.map((l) => (
-    <li
-      key={Math.random()}
-      className={classNames("page-item", {
-        active: l.active,
-        disabled: l.url == null,
-      })}
-    >
-      <Link
-        to={
-          l.url
-            ? `/admin/product/page/${new URLSearchParams(
-                new URL(l.url as string).search
-              ).get("page")}`
-            : ""
-        }
-        className="page-link"
-      >
-        {l.label.replace("&laquo; ", "").replace(" &raquo;", "")}
-      </Link>
-    </li>
-  ));
+  var paginationData: React.JSX.Element[] = [];
+  const totalPages = data?.pages as number;
+  const currentPage = data?.currentPage as number;
+  for (let page = 1; page <= totalPages; page++) {
+    paginationData.push(
+      <>
+        <li
+          key={Math.random()}
+          className={classNames("page-item", {
+            active: page == currentPage,
+          })}
+        >
+          <Link to={`/admin/product/page/${page}`} className="page-link">
+            {page}
+          </Link>
+        </li>
+      </>
+    );
+  }
 
   const viewData = list.map((product) => (
     <tr key={product.id}>
       <td>{product.id}</td>
-      <td>{product.name}</td>
-      {/* <td>
-        <img src={APP_ENV.BASE_URL + "/storage/" + category.image} width={50} />
-      </td> */}
-      <td>{product.description}</td>
+      <td>{product.title}</td>
+      <td>{product.details}</td>
       <td>{product.price}</td>
       <td>
         <img
           title={product.category?.title}
           alt={product.category?.title}
-          src={APP_ENV.BASE_URL + "/storage/" + product.category.image}
+          src={
+            APP_ENV.BASE_URL + "api/Files/Get/" + product.category.image + "/50"
+          }
           width={50}
         />
       </td>
-      <td>{dayjs(product.created_at).format("DD/MM/YYYY HH:mm:ss")}</td>
-      <td>{dayjs(product.updated_at).format("DD/MM/YYYY HH:mm:ss")}</td>
+      <td>{dayjs(product.createdAt).format("DD/MM/YYYY HH:mm:ss")}</td>
+      <td>{dayjs(product.updatedAt).format("DD/MM/YYYY HH:mm:ss")}</td>
       <td>
         <Link
           to={`/admin/product/edit/${product.id}`}

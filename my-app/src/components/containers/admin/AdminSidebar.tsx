@@ -36,11 +36,11 @@ const AdminSidebar = () => {
             </li>
             <li className="nav-item">
               <Link
-                to={"/"}
-                className="nav-link d-flex align-items-center gap-2 disabled"
+                to={"./user"}
+                className="nav-link d-flex align-items-center gap-2"
               >
                 <i className={"bi bi-people"}></i>
-                Customers
+                Users
               </Link>
             </li>
             <li className="nav-item">
