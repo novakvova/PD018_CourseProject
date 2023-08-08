@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using MyShop.Persistence.DbContexts;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using WebShop.Application.Common.Mappings;
-using WebShop.Application.Interfaces;
-using WebShop.Application.DependencyInjection;
-using WebShop.Persistence.DependencyInjection;
-
+using WebShop.Application.Common.Interfaces;
+using WebShop.Domain.Entities;
+using WebShop.Persistance.Data.Contexts.Initialisers;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,24 +17,49 @@ var configuration = builder.Configuration;
 // Add services to the container.
 
 // Add Clean-Architecture layers
-builder.Services.AddApplication();
-builder.Services.AddPersistence(configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(configuration);
+builder.Logging.AddLogging(configuration);
+
+builder.Services.AddAutoMapper(config => {
+    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(ICatalogDbContext).Assembly));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-// Add automapper
-builder.Services.AddAutoMapper(config => {
-    // load assembly with DTO`s for mapping
-    var assemblyDto = AppDomain.CurrentDomain.GetAssemblies().Where(a => ( a.GetName().Name ?? "" ).StartsWith("WebShop.Dto")).Single();
+builder.Services.AddSwaggerGen(o => {
+    o.AddSecurityDefinition("Bearer",
+        new OpenApiSecurityScheme {
+            In = ParameterLocation.Header,
+            Description = @"Bearer (paste here your token (remove all brackets) )",
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+        });
 
-    config.AddProfile(new AssemblyMappingProfile(assemblyDto));
-    config.AddProfile(new AssemblyMappingProfile(typeof(ICategoriesDbContext).Assembly));
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme
+            {
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+    o.SwaggerDoc("v1", new OpenApiInfo() {
+        Title = "WebShop API - v1",
+        Version = "v1"
+    });
 });
-
-
 
 // enable CORS to all sources
 builder.Services.AddCors(options => {
@@ -48,11 +72,20 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
+await app.InitialiseDatabaseAsync();
+
+// ensure upload folders exists
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(CategoryEntity)}");
+Directory.CreateDirectory($"{configuration.GetStorage("Uploads")}{nameof(ProductEntity)}");
+
 // Configure the HTTP request pipeline.
 //if ( app.Environment.IsDevelopment() ) {
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

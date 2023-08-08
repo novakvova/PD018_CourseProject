@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.CreateCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.DeleteCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Commands.UpdateCategory;
-using WebShop.Application.MediatR.Catalog.Categories.Queries.GetCategoryDetails;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.CreateCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.DeleteCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Commands.UpdateCategory;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryDetails;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategoryList;
+using WebShop.Application.CQRS.Catalog.Categories.Queries.GetCategorySearch;
+using WebShop.Domain.Constants;
 using WebShop.Dto.Catalog.Category;
+using WebShop.WebAPI.DTO.Catalog.Category;
 
 namespace WebShop.WebAPI.Controllers {
     public class CategoryController : BaseController {
@@ -15,6 +20,17 @@ namespace WebShop.WebAPI.Controllers {
             this.mapper = mapper;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<CategorySearchVm>> Search([FromQuery] GetCategorySearchDto search) {
+            var query = mapper.Map<GetCategorySearchQuery>(search);
+
+            // get result from Mediator request handler
+            var result = await Mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [Obsolete]
         [HttpGet]
         public async Task<ActionResult<CategoryListVm>> GetAll() {
             // forming query from http request
@@ -29,7 +45,7 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryListVm>> Get(Guid id) {
+        public async Task<ActionResult<CategoryListVm>> Get(int id) {
             // forming query from http request
             var query = new GetCategoryDetailsQuery {
                 CategoryId = id
@@ -42,23 +58,25 @@ namespace WebShop.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromBody] CreateCategoryDto dto) {
+        [Authorize(Roles = Roles.Administrator)]
+        public async Task<ActionResult<int>> Create([FromForm] CreateCategoryDto dto) {
             // map received from request dto to cqrs command
             var command = mapper.Map<CreateCategoryCommand>(dto);
-            command.CreatorID = UserId;
             var categoryId = await Mediator.Send(command);
 
             return Ok(categoryId);
         }
 
         [HttpPatch]
-        public async Task<ActionResult> Update([FromBody] UpdateCategoryDto dto) {
+        [Authorize(Roles = Roles.Administrator)]
+        public async Task<ActionResult> Update([FromForm] UpdateCategoryDto dto) {
             var command = mapper.Map<UpdateCategoryCommand>(dto);
             await Mediator.Send(command);
             return Ok();
         }
 
         [HttpDelete]
+        [Authorize(Roles = Roles.Administrator)]
         public async Task<ActionResult> Delete([FromBody] DeleteCategoryDto dto) {
             var command = mapper.Map<DeleteCategoryCommand>(dto);
             await Mediator.Send(command);
