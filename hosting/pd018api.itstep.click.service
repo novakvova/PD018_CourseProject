@@ -3,7 +3,7 @@ Description=pd018api.itstep.click
 
 [Service]
 WorkingDirectory=/var/www/pd018/pd018api.itstep.click
-ExecStart=/usr/bin/dotnet WebShop.API.Categories.dll --urls=http://localhost:5037
+ExecStart=/usr/bin/dotnet WebShop.WebAPI.dll --urls=http://localhost:5037
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
 RestartSec=10
